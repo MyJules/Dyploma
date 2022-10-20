@@ -23,7 +23,7 @@ signals:
     void videoSinkChanged();
 
 private:
-    void handleTimeout();
+    void onVideoFrameChanged(const QVideoFrame& videoFrame) const;
 
     QPointer<QVideoSink> m_videoSink;
     QTimer m_timer;

@@ -22,7 +22,7 @@ ApplicationWindow {
 
     CaptureSession {
         id: captureSession
-       // camera: camera
+        camera: camera
         videoOutput: videoOutput
     }
 

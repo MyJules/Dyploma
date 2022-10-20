@@ -4,16 +4,15 @@
 #include <QPainter>
 #include <QSize>
 #include <QVideoFrame>
+#include <QElapsedTimer>
 
 #include <QRandomGenerator>
 #include <QDateTime>
-
 
 VideoProcessor::VideoProcessor(QObject *parent)
     : QObject{parent}
 {
     m_timer.setInterval(500);
-    connect(&m_timer, &QTimer::timeout, this, &VideoProcessor::handleTimeout);
 }
 
 QVideoSink *VideoProcessor::videoSink() const
@@ -33,31 +32,32 @@ void VideoProcessor::setVideoSink(QVideoSink *newVideoSink)
 
 void VideoProcessor::start()
 {
-    m_timer.start();
-    handleTimeout();
+    connect(m_videoSink, &QVideoSink::videoFrameChanged, this, &VideoProcessor::onVideoFrameChanged);
 }
 
-void VideoProcessor::handleTimeout()
+void VideoProcessor::onVideoFrameChanged(const QVideoFrame &videoFrame) const
 {
-    if(!m_videoSink)
-         return;
-     QVideoFrame video_frame(QVideoFrameFormat(QSize(640, 480),QVideoFrameFormat::Format_BGRA8888));
-     if(!video_frame.isValid() || !video_frame.map(QVideoFrame::WriteOnly)){
-         qWarning() << "QVideoFrame is not valid or not writable";
-         return;
-     }
-     QImage::Format image_format = QVideoFrameFormat::imageFormatFromPixelFormat(video_frame.pixelFormat());
-     if(image_format == QImage::Format_Invalid){
-         qWarning() << "It is not possible to obtain image format from the pixel format of the videoframe";
-         return;
-     }
-     int plane = 0;
-     QImage image(video_frame.bits(plane), video_frame.width(),video_frame.height(), image_format);
-     image.fill(QColor::fromRgb(QRandomGenerator::global()->generate()));
-     QPainter painter(&image);
-     painter.drawText(image.rect(), Qt::AlignCenter, QDateTime::currentDateTime().toString());
-     painter.end();
+    QElapsedTimer timer;
+    timer.start();
 
-     video_frame.unmap();
-     m_videoSink->setVideoFrame(video_frame);
+    QVideoFrame frametodraw(videoFrame);
+    if(!frametodraw.map(QVideoFrame::ReadOnly))
+    {
+       qDebug() << "Failed to map frame!\n";
+       return;
+    }
+
+    QImage image(frametodraw.bits(0), frametodraw.width(),frametodraw.height(), QImage::Format_Grayscale8);
+
+    QPainter painter(&image);
+    QFont font = painter.font();
+    font.setPixelSize(32);
+    painter.setFont(font);
+    painter.setPen(Qt::white);
+    painter.drawText(image.rect(), Qt::AlignCenter, QDateTime::currentDateTime().toString());
+    painter.end();
+
+    frametodraw.unmap();
+    m_videoSink->setVideoFrame(frametodraw);
+    qDebug() << "Frame process time: " << timer.elapsed();
 }
