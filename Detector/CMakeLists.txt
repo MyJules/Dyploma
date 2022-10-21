@@ -7,7 +7,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories("src")
 
-find_package(Qt6 6.2 COMPONENTS Quick Multimedia REQUIRED)
+if(WIN32)
+    # Specify OpenCV folder, and take care of dependenciesand includes
+    set(OpenCV_DIR "libs/OpenCV-MinGW-Build-OpenCV-4.5.5-x64")
+endif()
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+find_package(Qt6 6.2 COMPONENTS Quick Multimedia Core5Compat REQUIRED)
 
 qt_add_executable(appDetector
     src/main.cpp
@@ -30,7 +37,11 @@ set_target_properties(appDetector PROPERTIES
 )
 
 target_link_libraries(appDetector
-    PRIVATE Qt6::Quick Qt6::Multimedia)
+    PRIVATE
+    Qt6::Quick
+    Qt6::Multimedia
+    ${OpenCV_LIBS}
+)
 
 install(TARGETS appDetector
     BUNDLE DESTINATION .

@@ -38,7 +38,6 @@ ApplicationWindow {
     Camera {
         id: camera
         cameraDevice: mediaDevices.defaultVideoInput
-        focusMode: Camera.FocusModeAutoNear
         active: true
     }
 

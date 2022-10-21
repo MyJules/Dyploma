@@ -5,6 +5,7 @@
 #include <QSize>
 #include <QVideoFrame>
 #include <QElapsedTimer>
+#include <QOpenGLFunctions>
 
 #include <QRandomGenerator>
 #include <QDateTime>
@@ -41,23 +42,52 @@ void VideoProcessor::onVideoFrameChanged(const QVideoFrame &videoFrame) const
     timer.start();
 
     QVideoFrame frametodraw(videoFrame);
-    if(!frametodraw.map(QVideoFrame::ReadOnly))
+
+    if (!frametodraw.isValid())
     {
-       qDebug() << "Failed to map frame!\n";
-       return;
+        qDebug() << "Frame is not valid!\n";
+        return;
     }
 
-    QImage image(frametodraw.bits(0), frametodraw.width(),frametodraw.height(), QImage::Format_Grayscale8);
+    if(frametodraw.handleType() == QVideoFrame::NoHandle)
+    {
+        qDebug() << "No Handle";
 
-    QPainter painter(&image);
-    QFont font = painter.font();
-    font.setPixelSize(32);
-    painter.setFont(font);
-    painter.setPen(Qt::white);
-    painter.drawText(image.rect(), Qt::AlignCenter, QDateTime::currentDateTime().toString());
-    painter.end();
+        if(!frametodraw.map(QVideoFrame::ReadOnly))
+        {
+           qDebug() << "Failed to map frame!\n";
+           return;
+        }
 
-    frametodraw.unmap();
+        QImage image(frametodraw.bits(0), frametodraw.width(),frametodraw.height(), QImage::Format_Grayscale8);
+
+        QPainter painter(&image);
+        QFont font = painter.font();
+        font.setPixelSize(32);
+        painter.setFont(font);
+        painter.setPen(Qt::red);
+        painter.drawText(image.rect(), Qt::AlignCenter, QDateTime::currentDateTime().toString());
+        painter.end();
+
+        frametodraw.unmap();
+    }else
+    {
+        qDebug() << "Normal processing";
+
+        //        QImage image( videoFrame.width(), videoFrame.height(), QImage::Format_ARGB32 );
+        //        GLuint textureId = static_cast<GLuint>( videoFrame.videoBuffer()->handle().toInt() );
+        //        QOpenGLContext* ctx = QOpenGLContext::currentContext();
+        //        QOpenGLFunctions* f = ctx->functions();
+        //        GLuint fbo;
+        //        f->glGenFramebuffers( 1, &fbo );
+        //        GLint prevFbo;
+        //        f->glGetIntegerv( GL_FRAMEBUFFER_BINDING, &prevFbo );
+        //        f->glBindFramebuffer( GL_FRAMEBUFFER, fbo );
+        //        f->glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0 );
+        //        f->glReadPixels( 0, 0,  videoFrame.width(),  videoFrame.height(), GL_RGBA, GL_UNSIGNED_BYTE, image.bits() );
+        //        f->glBindFramebuffer( GL_FRAMEBUFFER, static_cast<GLuint>( prevFbo ) );
+    }
+
     m_videoSink->setVideoFrame(frametodraw);
     qDebug() << "Frame process time: " << timer.elapsed();
 }
