@@ -20,6 +20,8 @@ qt_add_executable(appDetector
     src/main.cpp
     src/videoprocessor.h
     src/videoprocessor.cpp
+    src/cvutils.h
+    src/cvutils.cpp
 )
 
 qt_add_qml_module(appDetector

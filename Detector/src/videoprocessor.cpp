@@ -1,5 +1,8 @@
 #include "videoprocessor.h"
 
+#include "cvutils.h"
+
+#include <opencv2/core.hpp>
 #include <QImage>
 #include <QPainter>
 #include <QSize>
@@ -51,41 +54,41 @@ void VideoProcessor::onVideoFrameChanged(const QVideoFrame &videoFrame) const
 
     if(frametodraw.handleType() == QVideoFrame::NoHandle)
     {
-        qDebug() << "No Handle";
+        qDebug() << "Processing with mapped image";
 
-        if(!frametodraw.map(QVideoFrame::ReadOnly))
+        if(!frametodraw.map(QVideoFrame::ReadWrite))
         {
            qDebug() << "Failed to map frame!\n";
            return;
         }
 
-        QImage image(frametodraw.bits(0), frametodraw.width(),frametodraw.height(), QImage::Format_Grayscale8);
+        QImage image;
+        QImage::Format imageFormat = QVideoFrameFormat::imageFormatFromPixelFormat(frametodraw.pixelFormat());
+        if(imageFormat == QImage::Format_Invalid)
+        {
+            image = QImage(frametodraw.bits(0), frametodraw.width(), frametodraw.height(), QImage::Format_Grayscale8);
+        }else
+        {
+            image = QImage(frametodraw.bits(0), frametodraw.width(), frametodraw.height(), imageFormat);
+        }
+        //Process image here
+
+        cv::Mat cvImage = cvutils::QImageToCvMat(image.convertToFormat(QImage::Format_RGB32));
+
+        auto font = cv::FONT_HERSHEY_SIMPLEX;
+        cv::putText(cvImage, "Hello OpenCv", {40, 500}, font, 4, {255, 255, 122}, 2, cv::LINE_AA);
+
+        QImage processedImage = cvutils::cvMatToQImage(cvImage);
 
         QPainter painter(&image);
-        QFont font = painter.font();
-        font.setPixelSize(32);
-        painter.setFont(font);
-        painter.setPen(Qt::red);
-        painter.drawText(image.rect(), Qt::AlignCenter, QDateTime::currentDateTime().toString());
+        painter.drawImage(image.rect(), processedImage);
         painter.end();
 
         frametodraw.unmap();
     }else
     {
-        qDebug() << "Normal processing";
-
-        //        QImage image( videoFrame.width(), videoFrame.height(), QImage::Format_ARGB32 );
-        //        GLuint textureId = static_cast<GLuint>( videoFrame.videoBuffer()->handle().toInt() );
-        //        QOpenGLContext* ctx = QOpenGLContext::currentContext();
-        //        QOpenGLFunctions* f = ctx->functions();
-        //        GLuint fbo;
-        //        f->glGenFramebuffers( 1, &fbo );
-        //        GLint prevFbo;
-        //        f->glGetIntegerv( GL_FRAMEBUFFER_BINDING, &prevFbo );
-        //        f->glBindFramebuffer( GL_FRAMEBUFFER, fbo );
-        //        f->glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0 );
-        //        f->glReadPixels( 0, 0,  videoFrame.width(),  videoFrame.height(), GL_RGBA, GL_UNSIGNED_BYTE, image.bits() );
-        //        f->glBindFramebuffer( GL_FRAMEBUFFER, static_cast<GLuint>( prevFbo ) );
+        qDebug() << "Your device is not supported";
+        emit videoProcessError();
     }
 
     m_videoSink->setVideoFrame(frametodraw);

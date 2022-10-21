@@ -21,6 +21,7 @@ public:
 
 signals:
     void videoSinkChanged();
+    void videoProcessError() const;
 
 private:
     void onVideoFrameChanged(const QVideoFrame& videoFrame) const;

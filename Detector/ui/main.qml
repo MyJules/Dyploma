@@ -15,9 +15,12 @@ ApplicationWindow {
     Material.theme: Material.Dark
     Material.accent: Material.Indigo
 
-    VideoProcessor{
+    VideoProcessor {
        id: videoProcessor
        videoSink: videoOutput.videoSink
+       onVideoProcessError: {
+        print("Error processing image")
+       }
     }
 
     CaptureSession {
