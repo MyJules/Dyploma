@@ -36,7 +36,10 @@ void VideoProcessor::setVideoSink(QVideoSink *newVideoSink)
 
 void VideoProcessor::start()
 {
-    connect(m_videoSink, &QVideoSink::videoFrameChanged, this, &VideoProcessor::onVideoFrameChanged);
+#ifdef Q_OS_ANDROID
+    m_videoSink->setRhi(nullptr);
+#endif
+    connect(m_videoSink, &QVideoSink::videoFrameChanged, this, &VideoProcessor::onVideoFrameChanged, Qt::ConnectionType::DirectConnection);
 }
 
 void VideoProcessor::onVideoFrameChanged(const QVideoFrame &videoFrame) const
@@ -52,43 +55,41 @@ void VideoProcessor::onVideoFrameChanged(const QVideoFrame &videoFrame) const
         return;
     }
 
-    if(frametodraw.handleType() == QVideoFrame::NoHandle)
+    qDebug() << "Processing with mapped image";
+#ifdef Q_OS_ANDROID
+    m_videoSink->setRhi(nullptr);
+#endif
+    if(!frametodraw.map(QVideoFrame::ReadOnly))
     {
-        qDebug() << "Processing with mapped image";
+       qDebug() << "Failed to map frame!\n";
+       return;
+    }
 
-        if(!frametodraw.map(QVideoFrame::ReadWrite))
-        {
-           qDebug() << "Failed to map frame!\n";
-           return;
-        }
-
-        QImage image;
-        QImage::Format imageFormat = QVideoFrameFormat::imageFormatFromPixelFormat(frametodraw.pixelFormat());
-        if(imageFormat == QImage::Format_Invalid)
-        {
-            image = QImage(frametodraw.bits(0), frametodraw.width(), frametodraw.height(), QImage::Format_Grayscale8);
-        }else
-        {
-            image = QImage(frametodraw.bits(0), frametodraw.width(), frametodraw.height(), imageFormat);
-        }
-        //Process image here
-
-        cv::Mat cvImage = cvutils::QImageToCvMat(image.convertToFormat(QImage::Format_RGB32));
-
-        auto font = cv::FONT_HERSHEY_SIMPLEX;
-        cv::putText(cvImage, "Hello OpenCv", {40, 500}, font, 4, {255, 255, 122}, 2, cv::LINE_AA);
-
-        QImage processedImage = cvutils::cvMatToQImage(cvImage);
-
-        QPainter painter(&image);
-        painter.drawImage(image.rect(), processedImage);
-        painter.end();
-
-        frametodraw.unmap();
+    QImage image;
+    QImage::Format imageFormat = QVideoFrameFormat::imageFormatFromPixelFormat(frametodraw.pixelFormat());
+    if(imageFormat == QImage::Format_Invalid)
+    {
+        image = QImage(frametodraw.bits(0), frametodraw.width(), frametodraw.height(), QImage::Format_Grayscale8);
     }else
     {
-        qDebug() << "Your device is not supported";
-        emit videoProcessError();
+        image = QImage(frametodraw.bits(0), frametodraw.width(), frametodraw.height(), imageFormat);
+    }
+    //Process image here
+
+    cv::Mat cvImage = cvutils::QImageToCvMat(image.convertToFormat(QImage::Format_RGB32));
+
+    auto font = cv::FONT_HERSHEY_SIMPLEX;
+    cv::putText(cvImage, "Hello OpenCv", {40, 500}, font, 4, {255, 255, 122}, 2, cv::LINE_AA);
+
+    QImage processedImage = cvutils::cvMatToQImage(cvImage);
+
+    QPainter painter(&image);
+    painter.drawImage(image.rect(), processedImage);
+    painter.end();
+
+    if(frametodraw.isMapped())
+    {
+        frametodraw.unmap();
     }
 
     m_videoSink->setVideoFrame(frametodraw);

@@ -6,6 +6,7 @@
 #include <QQuickItem>
 #include <QPointer>
 #include <QTimer>
+#include <QImage>
 
 class VideoProcessor : public QObject
 {
@@ -28,7 +29,6 @@ private:
 
     QPointer<QVideoSink> m_videoSink;
     QTimer m_timer;
-
 };
 
 #endif // VIDEOPROCESSOR_H
