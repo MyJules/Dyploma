@@ -7,6 +7,7 @@
 #include <QPointer>
 #include <QTimer>
 #include <QImage>
+#include <QElapsedTimer>
 
 class VideoProcessor : public QObject
 {
@@ -25,7 +26,7 @@ signals:
     void videoProcessError() const;
 
 private:
-    void onVideoFrameChanged(const QVideoFrame& videoFrame) const;
+    void onVideoFrameChanged(const QVideoFrame& videoFrame);
 
     QPointer<QVideoSink> m_videoSink;
     QTimer m_timer;

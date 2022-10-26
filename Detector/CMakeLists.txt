@@ -42,7 +42,8 @@ qt_add_executable(appDetector
 qt_add_qml_module(appDetector
     URI Detector
     VERSION 1.0
-    QML_FILES ui/main.qml
+    QML_FILES
+        ui/main.qml
 )
 
 set_target_properties(appDetector PROPERTIES
