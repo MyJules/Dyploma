@@ -18,7 +18,7 @@ QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfa
     }
 
 #ifdef Q_OS_ANDROID
-    QImage image = QImage(input->bits(),input->width(), input->height(),
+    QImage image = QImage(input->bits(), input->width(), input->height(),
                           QImage::Format_RGB32).copy().mirrored(false, true);
 
     // Use if you want proper colors, but conversion works slow
@@ -39,9 +39,9 @@ QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfa
     cv::Mat cvImage = cvutils::QImageToCvMat(image);
 
     auto font = cv::FONT_HERSHEY_SIMPLEX;
-    cv::putText(cvImage, "Hello OpenCv", {40, 500}, font, 4, {0, 0, 0}, 2, cv::LINE_AA);
+    cv::putText(cvImage, "Hello OpenCv", {40, 300}, font, 4, {0, 0, 0}, 2, cv::LINE_AA, true);
 
-    //cv::cvtColor(cvImage, cvImage, cv::COLOR_BGR2GRAY);
+    cv::cvtColor(cvImage, cvImage, cv::COLOR_BGR2GRAY);
 
     QImage processedImage = cvutils::cvMatToQImage(cvImage);
 

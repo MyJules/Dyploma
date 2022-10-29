@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtMultimedia 5.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
+import QtQuick.Layouts 1.15
 
 import com.video.process 1.0
 
@@ -20,6 +21,8 @@ ApplicationWindow {
 
     Camera {
           id: camera
+
+          position: Camera.BackFace
 
           imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
 
@@ -48,7 +51,19 @@ ApplicationWindow {
           filters: [ openCVFilter ]
       }
 
-      Image {
-          id: photoPreview
-      }
+      Button {
+        id: switchCameraButton
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.left: parent.left
+        padding: 20
+
+        property bool frontFace: false
+
+        text: qsTr("Switch camera")
+        onClicked: {
+            frontFace = !frontFace
+            camera.position = frontFace ? Camera.FrontFace : Camera.BackFace
+        }
+     }
 }
