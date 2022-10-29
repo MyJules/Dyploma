@@ -18,7 +18,14 @@ QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfa
     }
 
 #ifdef Q_OS_ANDROID
-    QImage image = QImage(input->bits(),input->width(), input->height(), QImage::Format_RGB32).copy().mirrored(false, true);
+    QImage image = QImage(input->bits(),input->width(), input->height(),
+                          QImage::Format_RGB32).copy().mirrored(false, true);
+
+    // Use if you want proper colors, but conversion works slow
+    if(input->pixelFormat() == QVideoFrame::Format_ABGR32)
+    {
+        image = cvutils::ABGRtoRGB(image);
+    }
 #else
     QImage image = input->image();
 #endif
@@ -29,16 +36,17 @@ QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfa
     }
 
     //Process image here
-
     cv::Mat cvImage = cvutils::QImageToCvMat(image);
 
-    cv::cvtColor(cvImage, cvImage, cv::COLOR_BGR2GRAY);
+    auto font = cv::FONT_HERSHEY_SIMPLEX;
+    cv::putText(cvImage, "Hello OpenCv", {40, 500}, font, 4, {0, 0, 0}, 2, cv::LINE_AA);
+
+    //cv::cvtColor(cvImage, cvImage, cv::COLOR_BGR2GRAY);
 
     QImage processedImage = cvutils::cvMatToQImage(cvImage);
 
     QPainter painter(&image);
     painter.drawImage(image.rect(), processedImage);
-    painter.drawRect(QRect(80,120,200,100));
     painter.end();
 
     qDebug() << "Elapsed Time: " << timer.elapsed();

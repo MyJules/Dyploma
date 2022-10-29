@@ -12,7 +12,7 @@ ApplicationWindow {
     title: qsTr("Detector")
 
     Material.theme: Material.Dark
-    Material.accent: Material.Indigo
+    Material.accent: Material.Orange
 
     OpenCVFilter {
         id: openCVFilter
@@ -22,6 +22,8 @@ ApplicationWindow {
           id: camera
 
           imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
+
+          viewfinder.resolution: "1280x720"
 
           exposure {
               exposureCompensation: -1.0

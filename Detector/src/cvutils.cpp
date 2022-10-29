@@ -149,3 +149,29 @@ cv::Mat cvutils::QImageToCvMat(const QImage &inImage, bool inCloneImageData)
 
     return cv::Mat();
 }
+
+QImage cvutils::ABGRtoRGB(const QImage &image)
+{
+    const auto max = image.width() * image.height() * 4;
+    std::vector<uchar> buf;
+    buf.reserve(max);
+    const uchar *bits = image.bits();
+
+    static const size_t i1 = ( Q_BYTE_ORDER == Q_LITTLE_ENDIAN ? 2 : 0 );
+    static const size_t i2 = ( Q_BYTE_ORDER == Q_LITTLE_ENDIAN ? 1 : 3 );
+    static const size_t i3 = ( Q_BYTE_ORDER == Q_LITTLE_ENDIAN ? 0 : 2 );
+    static const size_t i4 = ( Q_BYTE_ORDER == Q_LITTLE_ENDIAN ? 3 : 1 );
+
+    for(auto i = 0; i < max;)
+    {
+        buf.emplace_back(bits[i1]);
+        buf.emplace_back(bits[i2]);
+        buf.emplace_back(bits[i3]);
+        buf.emplace_back(bits[i4]);
+
+        bits += 4;
+        i += 4;
+    }
+
+    return QImage(&buf[0], image.width(), image.height(), QImage::Format_RGB32);
+}
