@@ -1,12 +1,22 @@
+#include <OpenCVFilter.h>
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickStyle>
 
 int main(int argc, char *argv[])
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
     QGuiApplication app(argc, argv);
 
+    QQuickStyle::setStyle("Material");
+
+    qmlRegisterType<OpenCVFilter>("com.video.process", 1, 0, "OpenCVFilter");
+
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/Detector/ui/main.qml"_qs);
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

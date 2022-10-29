@@ -1,6 +1,7 @@
 #include "cvutils.h"
 
 #include <QPixmap>
+#include <QOpenGLFunctions>
 
 QImage cvutils::cvMatToQImage(const cv::Mat &inMat)
 {
