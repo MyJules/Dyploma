@@ -1,9 +1,13 @@
 #include "OpenCVFilter.h"
 
+#include <opencv2/features2d.hpp>
+#include <opencv2/core.hpp>
+#include <cvutils.h>
+
 QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags)
 {
-    QElapsedTimer timer;
-    timer.start();
+//    QElapsedTimer timer;
+//    timer.start();
 
     if (!input->isValid())
     {
@@ -21,7 +25,6 @@ QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfa
     QImage image = QImage(input->bits(), input->width(), input->height(),
                           QImage::Format_RGB32).copy().mirrored(false, true);
 
-    // Use if you want proper colors, but conversion works slow
     if(input->pixelFormat() == QVideoFrame::Format_ABGR32)
     {
         image = cvutils::ABGRtoRGB(image);
@@ -38,18 +41,22 @@ QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfa
     //Process image here
     cv::Mat cvImage = cvutils::QImageToCvMat(image);
 
-    auto font = cv::FONT_HERSHEY_SIMPLEX;
-    cv::putText(cvImage, "Hello OpenCv", {40, 300}, font, 4, {0, 0, 0}, 2, cv::LINE_AA, true);
-
     cv::cvtColor(cvImage, cvImage, cv::COLOR_BGR2GRAY);
 
-    QImage processedImage = cvutils::cvMatToQImage(cvImage);
+    std::vector<cv::Point2f> corners;
+    cv::goodFeaturesToTrack(cvImage, corners, 25, 0.01, 10);
 
+    for(int i = 0; i < corners.size(); i++)
+    {
+        cv::circle(cvImage, corners[i], 4, 255, 1);
+    }
+
+    QImage processedImage = cvutils::cvMatToQImage(cvImage);
     QPainter painter(&image);
     painter.drawImage(image.rect(), processedImage);
     painter.end();
 
-    qDebug() << "Elapsed Time: " << timer.elapsed();
+//    qDebug() << "Elapsed Time: " << timer.elapsed();
 
     return image;
 }

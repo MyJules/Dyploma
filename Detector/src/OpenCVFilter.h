@@ -1,9 +1,6 @@
 #ifndef PROCESSVIDEOSURFACE_H
 #define PROCESSVIDEOSURFACE_H
 
-#include <opencv2/core.hpp>
-#include <cvutils.h>
-
 #include <QQuickItem>
 #include <QtMultimedia>
 #include <QElapsedTimer>
