@@ -25,8 +25,25 @@ ApplicationWindow {
         anchors.fill: parent
         currentIndex: 0
 
+        onCurrentIndexChanged: {
+            if(swipeView.currentIndex === 0){
+                camera.start();
+            }else{
+                camera.stop();
+            }
+        }
+
         Item {
             id: firstPage
+
+            Text {
+                id: detectorText
+                text:qsTr("Detector")
+                font.pointSize: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.topMargin: 20
+
+            }
 
             Camera {
                   id: camera
@@ -88,11 +105,9 @@ ApplicationWindow {
                     text: qsTr("On/Off Camera")
                     onClicked: {
                         cameraActive = !cameraActive
-                        if(cameraActive)
-                        {
+                        if(cameraActive){
                             camera.stop()
-                        }else
-                        {
+                        }else{
                             camera.start()
                         }
                      }
