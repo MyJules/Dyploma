@@ -36,15 +36,6 @@ ApplicationWindow {
         Item {
             id: firstPage
 
-            Text {
-                id: detectorText
-                text:qsTr("Detector")
-                font.pointSize: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: 20
-
-            }
-
             Camera {
                   id: camera
 
@@ -77,13 +68,23 @@ ApplicationWindow {
                   filters: [ openCVFilter ]
               }
 
+              Text {
+                  id: detectorText
+                  text:qsTr("Detector")
+                  font.pointSize: 20
+                  anchors.horizontalCenter: parent.horizontalCenter
+                  anchors.topMargin: 20
+
+              }
+
+
               Row {
                   id: column
                   anchors.bottom: parent.bottom
                   anchors.right: parent.right
-                  padding: 10
                   spacing: 4
-                  anchors.bottomMargin: 20
+                  anchors.bottomMargin: 15
+                  anchors.rightMargin: 15
 
                   Button {
                     id: switchCameraButton
@@ -98,21 +99,13 @@ ApplicationWindow {
                   }
 
                   Button {
-                    id: cameraOffOnn
+                    id: trackButton
 
-                    property bool cameraActive: false
-
-                    text: qsTr("On/Off Camera")
+                    text: qsTr("Track")
                     onClicked: {
-                        cameraActive = !cameraActive
-                        if(cameraActive){
-                            camera.stop()
-                        }else{
-                            camera.start()
-                        }
+                        console.log("Start tracking")
                      }
                   }
-
              }
         }
 
