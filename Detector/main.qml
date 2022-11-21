@@ -27,6 +27,7 @@ ApplicationWindow {
 
         onCurrentIndexChanged: {
             if(swipeView.currentIndex === 0){
+                camera.viewfinder.resolution = resolutionTumbler.model[resolutionTumbler.currentIndex]
                 camera.start();
             }else{
                 camera.stop();
@@ -146,28 +147,10 @@ ApplicationWindow {
                 Tumbler {
                     id: resolutionTumbler
                     scale: 1.5
-                    model: ["1280x720", "640x480"]
+                    model: ["640x480", "1280x720"]
                     wrap: true
                     font.pointSize: 8
                 }
-
-            }
-
-            Button {
-              id: applyButton
-              anchors.bottom: parent.bottom
-              anchors.right: parent.right
-              anchors.left: parent.left
-              padding: 20
-              anchors.bottomMargin: 20
-
-              property bool frontFace: false
-
-              text: qsTr("Apply")
-              onClicked: {
-                  frontFace = !frontFace
-                  camera.position = frontFace ? Camera.FrontFace : Camera.BackFace
-              }
             }
         }
     }
