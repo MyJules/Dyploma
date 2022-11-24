@@ -4,10 +4,27 @@
 #include <opencv2/core.hpp>
 #include <cvutils.h>
 
-QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags)
+cv::Mat GoodFeaturesToTrack::process(const cv::Mat& image)
 {
-//    QElapsedTimer timer;
-//    timer.start();
+    cv::Mat result = image;
+    cv::cvtColor(result, result, cv::COLOR_BGR2GRAY);
+
+    std::vector<cv::Point2f> corners;
+    cv::goodFeaturesToTrack(result, corners, 25, 0.01, 10);
+
+    for(int i = 0; i < corners.size(); i++)
+    {
+        cv::circle(result, corners[i], 4, 255, 1);
+    }
+
+    return result;
+}
+
+
+QVideoFrame IVideoFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags)
+{
+    QElapsedTimer timer;
+    timer.start();
 
     if (!input->isValid())
     {
@@ -41,22 +58,14 @@ QVideoFrame TestFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfa
     //Process image here
     cv::Mat cvImage = cvutils::QImageToCvMat(image);
 
-    cv::cvtColor(cvImage, cvImage, cv::COLOR_BGR2GRAY);
+    auto processed = process(cvImage);
 
-    std::vector<cv::Point2f> corners;
-    cv::goodFeaturesToTrack(cvImage, corners, 25, 0.01, 10);
-
-    for(int i = 0; i < corners.size(); i++)
-    {
-        cv::circle(cvImage, corners[i], 4, 255, 1);
-    }
-
-    QImage processedImage = cvutils::cvMatToQImage(cvImage);
+    QImage processedImage = cvutils::cvMatToQImage(processed);
     QPainter painter(&image);
     painter.drawImage(image.rect(), processedImage);
     painter.end();
 
-//    qDebug() << "Elapsed Time: " << timer.elapsed();
+    qDebug() << "Elapsed Time: " << timer.elapsed();
 
     return image;
 }

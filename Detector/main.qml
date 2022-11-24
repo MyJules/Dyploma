@@ -133,7 +133,7 @@ ApplicationWindow {
                 Tumbler {
                     id: trackTumbler
                     scale: 1.5
-                    model: ["BRIEF", "ORB"]
+                    model: ["BF"]
                     wrap: true
                     font.pointSize: 8
                 }
