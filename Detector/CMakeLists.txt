@@ -24,6 +24,8 @@ elseif(ANDROID)
     link_directories("${CMAKE_CURRENT_SOURCE_DIR}/libs/OpenCV-android-sdk/sdk/native/libs/armeabi-v7a/")
     link_directories("${CMAKE_CURRENT_SOURCE_DIR}/libs/OpenCV-android-sdk/sdk/native/3rdparty/libs/armeabi-v7a/")
     set(ANDROID_EXTRA_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/libs/OpenCV-android-sdk/sdk/native/libs/armeabi-v7a/libopencv_java4.so" CACHE INTERNAL "")
+else()
+    set(OpenCV_DIR "libs/opencv")
 endif()
 
 # Qt library
