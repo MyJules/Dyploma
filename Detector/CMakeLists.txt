@@ -45,8 +45,12 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/cvutils.h
         src/cvutils.cpp
-        src/OpenCVFilter.h
-        src/OpenCVFilter.cpp
+        src/filters/videofilters.h
+        src/filters/videofilters.cpp
+        src/filters/ivideofilter.h
+        src/filters/ivideofilter.cpp
+        src/filters/goodfeaturestotrack.h
+        src/filters/goodfeaturestotrack.cpp
         qml.qrc
 )
 

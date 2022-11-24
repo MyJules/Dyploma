@@ -1,4 +1,4 @@
-#include <OpenCVFilter.h>
+#include <filters/videofilters.h>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
-    qmlRegisterType<OpenCVFilter>("com.video.process", 1, 0, "OpenCVFilter");
+    qmlRegisterType<GoodFeaturesToTrackFilter>("com.video.process", 1, 0, "GoodFeaturesToTrackFilter");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

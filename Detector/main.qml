@@ -16,8 +16,8 @@ ApplicationWindow {
     Material.theme: Material.Light
     Material.accent: Material.Orange
 
-    OpenCVFilter {
-        id: openCVFilter
+    GoodFeaturesToTrackFilter {
+        id: goodFeaturesToTrackFilter
     }
 
     SwipeView {
@@ -66,7 +66,7 @@ ApplicationWindow {
                   focus : visible
                   autoOrientation: true
                   fillMode: VideoOutput.PreserveAspectFit
-                  filters: [ openCVFilter ]
+                  filters: [ goodFeaturesToTrackFilter ]
               }
 
               Text {
