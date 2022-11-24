@@ -26,12 +26,8 @@ ApplicationWindow {
         currentIndex: 0
 
         onCurrentIndexChanged: {
-            if(swipeView.currentIndex === 0){
-                camera.viewfinder.resolution = resolutionTumbler.model[resolutionTumbler.currentIndex]
-                camera.start();
-            }else{
-                camera.stop();
-            }
+            handleCameraSwitch()
+            handleFilterDetectorSwitch()
         }
 
         Item {
@@ -61,6 +57,7 @@ ApplicationWindow {
               }
 
               VideoOutput {
+                  id: videoOutput
                   source: camera
                   anchors.fill: parent
                   focus : visible
@@ -140,7 +137,7 @@ ApplicationWindow {
                 Tumbler {
                     id: filterTumbler
                     scale: 1.5
-                    model: ["Harris", "GFTT"]
+                    model: ["GFTT", "Harris"]
                     wrap: true
                     font.pointSize: 8
                 }
@@ -163,5 +160,37 @@ ApplicationWindow {
 
         anchors.bottom: swipeView.bottom
         anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    function handleCameraSwitch() {
+        if(swipeView.currentIndex === 0){
+            camera.viewfinder.resolution = resolutionTumbler.model[resolutionTumbler.currentIndex]
+            camera.start();
+        }else{
+            camera.stop();
+        }
+    }
+
+    function handleFilterDetectorSwitch() {
+        if(swipeView.currentIndex === 1) return
+
+        let currentFilter = filterTumbler.model[filterTumbler.currentIndex]
+        switch (currentFilter) {
+            case 'Harris':
+                console.log("Handle harris")
+                videoOutput.filters = []
+
+            break;
+
+            case 'GFTT':
+                console.log("Handle GFTT")
+                videoOutput.filters = [goodFeaturesToTrackFilter]
+
+            break;
+
+            default:
+                console.log("Error: unhandled tumbler state")
+            break;
+        }
     }
 }

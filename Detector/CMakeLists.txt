@@ -46,7 +46,6 @@ set(PROJECT_SOURCES
         src/cvutils.h
         src/cvutils.cpp
         src/filters/videofilters.h
-        src/filters/videofilters.cpp
         src/filters/ivideofilter.h
         src/filters/ivideofilter.cpp
         src/filters/goodfeaturestotrack.h
