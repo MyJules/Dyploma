@@ -4,6 +4,11 @@
 #include <opencv2/core.hpp>
 #include <cvutils.h>
 
+GoodFeaturesToTrack::GoodFeaturesToTrack(QImage* image)
+    : m_imageToTrack(image)
+{
+}
+
 cv::Mat GoodFeaturesToTrack::process(const cv::Mat& image)
 {
     cv::Mat result = image;

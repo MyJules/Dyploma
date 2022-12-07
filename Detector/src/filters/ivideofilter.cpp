@@ -2,10 +2,12 @@
 
 #include <cvutils.h>
 
+#include <QQuickView>
+
 QVideoFrame IVideoFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags)
 {
-    QElapsedTimer timer;
-    timer.start();
+//    QElapsedTimer timer;
+//    timer.start();
 
     if (!input->isValid())
     {
@@ -46,7 +48,7 @@ QVideoFrame IVideoFilter::run(QVideoFrame *input, const QVideoSurfaceFormat &sur
     painter.drawImage(image.rect(), processedImage);
     painter.end();
 
-    qDebug() << "Elapsed Time: " << timer.elapsed();
+    //qDebug() << "Elapsed Time: " << timer.elapsed();
 
     return image;
 }

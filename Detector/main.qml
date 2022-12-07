@@ -51,7 +51,11 @@ ApplicationWindow {
 
                   imageCapture {
                       onImageCaptured: {
-                          photoPreview.source = preview  // Show the preview in an Image
+                          //preview
+                          imageToTrack.source = preview
+                          goodFeaturesToTrackFilter.imageToTrack = imageToTrack
+                          console.log(goodFeaturesToTrackFilter.imageToTrack)
+                          console.log("kek")
                       }
                   }
               }
@@ -73,6 +77,22 @@ ApplicationWindow {
                   anchors.horizontalCenter: parent.horizontalCenter
                   anchors.topMargin: 20
 
+              }
+
+
+              Image {
+                  id: imageToTrack
+                  source: "image:"
+
+                  fillMode: Image.PreserveAspectFit
+
+                  width: 240
+                  height: 120
+
+                  anchors.top: parent.top
+                  anchors.left: parent.left
+                  anchors.bottomMargin: 5
+                  anchors.rightMargin: 5
               }
 
 
@@ -101,7 +121,18 @@ ApplicationWindow {
 
                     text: qsTr("Track")
                     onClicked: {
-                        console.log("Start tracking")
+                        console.log("Capture image to track")
+                        camera.imageCapture.capture();
+                     }
+                  }
+
+                  Button {
+                    id: resetButton
+
+                    text: qsTr("Reset")
+                    onClicked: {
+                        console.log("Capture image to track")
+                        imageToTrack.source = "image:"
                      }
                   }
              }
@@ -125,14 +156,6 @@ ApplicationWindow {
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     verticalCenter: parent.verticalCenter
-                }
-
-                Tumbler {
-                    id: trackTumbler
-                    scale: 1.5
-                    model: ["BF"]
-                    wrap: true
-                    font.pointSize: 8
                 }
                 Tumbler {
                     id: filterTumbler
