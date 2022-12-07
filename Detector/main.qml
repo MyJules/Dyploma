@@ -197,9 +197,9 @@ ApplicationWindow {
     }
 
     function disableAllFilters() {
-        for(const filter of videoOutput.filters)
-        {
-            filter.active = false
+        // videoOutput.filters
+        for (var i = 0; i < videoOutput.filters.length; i++){
+            videoOutput.filters[i].active = false
         }
     }
 
