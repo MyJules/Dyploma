@@ -20,17 +20,27 @@ public:
         connect(this, &GoodFeaturesToTrackFilter::updateImageToTrack, this, [filter](){
             filter->onUpdateImageToTrack();
         });
+
+        connect(this, &GoodFeaturesToTrackFilter::resetImageToTrack, this, [filter](){
+            filter->onResetImageToTrack();
+        });
         return filter;
     }
 
 signals:
     void finished(QObject *result);
     void updateImageToTrack();
+    void resetImageToTrack();
 
 public slots:
     void onNewImageToTrack()
     {
         emit updateImageToTrack();
+    }
+
+    void onResetImageToTrack()
+    {
+        emit resetImageToTrack();
     }
 };
 

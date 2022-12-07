@@ -132,6 +132,7 @@ ApplicationWindow {
                     onClicked: {
                         console.log("Reset image to track")
                         imageToTrack.source = "image:"
+                        goodFeaturesToTrackFilter.onResetImageToTrack()
                      }
                   }
              }

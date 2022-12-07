@@ -18,6 +18,13 @@ public slots:
         qDebug() << "Update";
     }
 
+    void onResetImageToTrack()
+    {
+        m_imageToTrack = std::nullopt;
+        qDebug() << "Reset";
+    }
+
+
 private:
     bool m_isNewImageToTrack = true;
     std::optional<cv::Mat> m_imageToTrack;
