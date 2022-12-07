@@ -196,6 +196,13 @@ ApplicationWindow {
         }
     }
 
+    function disableAllFilters() {
+        for(const filter of videoOutput.filters)
+        {
+            filter.active = false
+        }
+    }
+
     function handleFilterDetectorSwitch() {
         if(swipeView.currentIndex === 1) return
 
@@ -203,13 +210,14 @@ ApplicationWindow {
         switch (currentFilter) {
             case 'Harris':
                 console.log("Handle harris")
-                videoOutput.filters = []
+                disableAllFilters();
 
             break;
 
             case 'GFTT':
                 console.log("Handle GFTT")
-                videoOutput.filters = [goodFeaturesToTrackFilter]
+                disableAllFilters();
+                goodFeaturesToTrackFilter.active = true
 
             break;
 

@@ -9,6 +9,7 @@ class GoodFeaturesToTrack final : public IVideoFilter
 {
 public:
     explicit GoodFeaturesToTrack();
+    ~GoodFeaturesToTrack();
     [[nodiscard]] virtual cv::Mat process(const cv::Mat&);
 
 public slots:
@@ -23,7 +24,6 @@ public slots:
         m_imageToTrack = std::nullopt;
         qDebug() << "Reset";
     }
-
 
 private:
     bool m_isNewImageToTrack = true;

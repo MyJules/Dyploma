@@ -8,6 +8,10 @@ GoodFeaturesToTrack::GoodFeaturesToTrack()
 {
 }
 
+GoodFeaturesToTrack::~GoodFeaturesToTrack()
+{
+}
+
 cv::Mat GoodFeaturesToTrack::process(const cv::Mat& image)
 {
     cv::Mat result = image;
