@@ -26,7 +26,7 @@ public slots:
     }
 
 private:
-    bool m_isNewImageToTrack = true;
+    bool m_isNewImageToTrack = false;
     std::optional<cv::Mat> m_imageToTrack;
 };
 
