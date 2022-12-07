@@ -12,34 +12,26 @@ class GoodFeaturesToTrackFilter : public QAbstractVideoFilter
 {
     Q_OBJECT
     QML_ELEMENT
-    Q_PROPERTY(QImage imageToTrack READ imageToTrack WRITE setImageToTrack NOTIFY imageToTrackChanged)
+
 public:
     QVideoFilterRunnable *createFilterRunnable()
     {
-        return new GoodFeaturesToTrack(m_imageToTrack);
+        GoodFeaturesToTrack *filter = new GoodFeaturesToTrack();
+        connect(this, &GoodFeaturesToTrackFilter::updateImageToTrack, this, [filter](){
+            filter->onUpdateImageToTrack();
+        });
+        return filter;
     }
-
-    QImage imageToTrack()
-    {
-        if(m_imageToTrack)
-            return *m_imageToTrack;
-        else
-            return QImage();
-    }
-
-    void setImageToTrack(const QImage& img)
-    {
-        m_imageToTrack = new QImage(img);
-    }
-
-public slots:
-    void imageToTrackChanged(){}
 
 signals:
     void finished(QObject *result);
+    void updateImageToTrack();
 
-private:
-    QImage *m_imageToTrack = nullptr;
+public slots:
+    void onNewImageToTrack()
+    {
+        emit updateImageToTrack();
+    }
 };
 
 #endif // PROCESSVIDEOSURFACE_H

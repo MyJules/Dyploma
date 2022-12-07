@@ -3,14 +3,24 @@
 
 #include <filters/ivideofilter.h>
 
+#include <optional>
+
 class GoodFeaturesToTrack final : public IVideoFilter
 {
 public:
-    explicit GoodFeaturesToTrack(QImage* image);
+    explicit GoodFeaturesToTrack();
     [[nodiscard]] virtual cv::Mat process(const cv::Mat&);
 
+public slots:
+    void onUpdateImageToTrack()
+    {
+        m_isNewImageToTrack = true;
+        qDebug() << "Update";
+    }
+
 private:
-    QImage *m_imageToTrack;
+    bool m_isNewImageToTrack = true;
+    std::optional<cv::Mat> m_imageToTrack;
 };
 
 #endif // GOODFEATURESTOTRACK_H

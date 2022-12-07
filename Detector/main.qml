@@ -53,9 +53,7 @@ ApplicationWindow {
                       onImageCaptured: {
                           //preview
                           imageToTrack.source = preview
-                          goodFeaturesToTrackFilter.imageToTrack = imageToTrack
-                          console.log(goodFeaturesToTrackFilter.imageToTrack)
-                          console.log("kek")
+                          goodFeaturesToTrackFilter.onNewImageToTrack();
                       }
                   }
               }
@@ -78,9 +76,7 @@ ApplicationWindow {
                   anchors.right: parent.right
                   anchors.topMargin: 20
                   anchors.rightMargin: 40
-
               }
-
 
               Image {
                   id: imageToTrack
@@ -134,7 +130,7 @@ ApplicationWindow {
 
                     text: qsTr("Reset")
                     onClicked: {
-                        console.log("Capture image to track")
+                        console.log("Reset image to track")
                         imageToTrack.source = "image:"
                      }
                   }
