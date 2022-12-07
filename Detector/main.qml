@@ -74,8 +74,10 @@ ApplicationWindow {
                   id: detectorText
                   text:qsTr("Detector")
                   font.pointSize: 20
-                  anchors.horizontalCenter: parent.horizontalCenter
+                  anchors.top: parent.top
+                  anchors.right: parent.right
                   anchors.topMargin: 20
+                  anchors.rightMargin: 40
 
               }
 
@@ -91,8 +93,9 @@ ApplicationWindow {
 
                   anchors.top: parent.top
                   anchors.left: parent.left
-                  anchors.bottomMargin: 5
-                  anchors.rightMargin: 5
+                  anchors.bottomMargin: 10
+                  anchors.rightMargin: 10
+                  anchors.topMargin: 10
               }
 
 
@@ -145,8 +148,10 @@ ApplicationWindow {
                 id: optionText
                 text:qsTr("Options")
                 font.pointSize: 20
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.right: parent.right
                 anchors.topMargin: 20
+                anchors.rightMargin: 40
 
             }
 
