@@ -13,17 +13,8 @@ public:
     [[nodiscard]] virtual cv::Mat process(const cv::Mat&);
 
 public slots:
-    void onUpdateImageToTrack()
-    {
-        m_isNewImageToTrack = true;
-        qDebug() << "Update";
-    }
-
-    void onResetImageToTrack()
-    {
-        m_imageToTrack = std::nullopt;
-        qDebug() << "Reset";
-    }
+    void onUpdateImageToTrack();
+    void onResetImageToTrack();
 
 private:
     bool m_isNewImageToTrack = false;

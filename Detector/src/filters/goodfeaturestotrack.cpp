@@ -33,3 +33,15 @@ cv::Mat GoodFeaturesToTrack::process(const cv::Mat& image)
 
     return result;
 }
+
+void GoodFeaturesToTrack::onUpdateImageToTrack()
+{
+    m_isNewImageToTrack = true;
+    qDebug() << "Update";
+}
+
+void GoodFeaturesToTrack::onResetImageToTrack()
+{
+    m_imageToTrack = std::nullopt;
+    qDebug() << "Reset";
+}

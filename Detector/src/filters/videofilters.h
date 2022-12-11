@@ -14,18 +14,7 @@ class GoodFeaturesToTrackFilter : public QAbstractVideoFilter
     QML_ELEMENT
 
 public:
-    QVideoFilterRunnable *createFilterRunnable()
-    {
-        GoodFeaturesToTrack *filter = new GoodFeaturesToTrack();
-        connect(this, &GoodFeaturesToTrackFilter::updateImageToTrack, this, [filter](){
-            filter->onUpdateImageToTrack();
-        });
-
-        connect(this, &GoodFeaturesToTrackFilter::resetImageToTrack, this, [filter](){
-            filter->onResetImageToTrack();
-        });
-        return filter;
-    }
+    QVideoFilterRunnable *createFilterRunnable() override;
 
 signals:
     void finished(QObject *result);
@@ -33,15 +22,8 @@ signals:
     void resetImageToTrack();
 
 public slots:
-    void onNewImageToTrack()
-    {
-        emit updateImageToTrack();
-    }
-
-    void onResetImageToTrack()
-    {
-        emit resetImageToTrack();
-    }
+    void onNewImageToTrack();
+    void onResetImageToTrack();
 };
 
 #endif // PROCESSVIDEOSURFACE_H
