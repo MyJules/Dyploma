@@ -169,7 +169,7 @@ ApplicationWindow {
                 Tumbler {
                     id: resolutionTumbler
                     scale: 1.5
-                    model: ["640x480", "1280x720"]
+                    model: ["640x480", "1280x720", "320x240"]
                     wrap: true
                     font.pointSize: 8
                 }
