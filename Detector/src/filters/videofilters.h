@@ -2,13 +2,13 @@
 #define PROCESSVIDEOSURFACE_H
 
 #include <filters/ivideofilter.h>
-#include <filters/goodfeaturestotrack.h>
+#include <filters/SIFT.h>
 
 #include <opencv2/core.hpp>
 
 #include <QtQml/qqml.h>
 
-class GoodFeaturesToTrackFilter : public QAbstractVideoFilter
+class SIFTFilter : public QAbstractVideoFilter
 {
     Q_OBJECT
     QML_ELEMENT

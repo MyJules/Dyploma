@@ -1,24 +1,24 @@
 #include "videofilters.h"
 
-QVideoFilterRunnable *GoodFeaturesToTrackFilter::createFilterRunnable()
+QVideoFilterRunnable *SIFTFilter::createFilterRunnable()
 {
-    GoodFeaturesToTrack *filter = new GoodFeaturesToTrack();
-    connect(this, &GoodFeaturesToTrackFilter::updateImageToTrack, this, [filter](){
+    SIFT *filter = new SIFT();
+    connect(this, &SIFTFilter::updateImageToTrack, this, [filter](){
         filter->onUpdateImageToTrack();
     });
 
-    connect(this, &GoodFeaturesToTrackFilter::resetImageToTrack, this, [filter](){
+    connect(this, &SIFTFilter::resetImageToTrack, this, [filter](){
         filter->onResetImageToTrack();
     });
     return filter;
 }
 
-void GoodFeaturesToTrackFilter::onNewImageToTrack()
+void SIFTFilter::onNewImageToTrack()
 {
     emit updateImageToTrack();
 }
 
-void GoodFeaturesToTrackFilter::onResetImageToTrack()
+void SIFTFilter::onResetImageToTrack()
 {
     emit resetImageToTrack();
 }

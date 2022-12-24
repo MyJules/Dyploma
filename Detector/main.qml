@@ -13,11 +13,11 @@ ApplicationWindow {
     visible: true
     title: qsTr("Detector")
 
-    Material.theme: Material.Light
+    Material.theme: Material.Dark
     Material.accent: Material.Orange
 
-    GoodFeaturesToTrackFilter {
-        id: goodFeaturesToTrackFilter
+    SIFTFilter {
+        id: siftFilter
     }
 
     SwipeView {
@@ -53,7 +53,7 @@ ApplicationWindow {
                       onImageCaptured: {
                           //preview
                           imageToTrack.source = preview
-                          goodFeaturesToTrackFilter.onNewImageToTrack();
+                          siftFilter.onNewImageToTrack();
                       }
                   }
               }
@@ -65,7 +65,7 @@ ApplicationWindow {
                   focus : visible
                   autoOrientation: true
                   fillMode: VideoOutput.PreserveAspectFit
-                  filters: [ goodFeaturesToTrackFilter ]
+                  filters: [ siftFilter ]
               }
 
               Text {
@@ -132,7 +132,7 @@ ApplicationWindow {
                     onClicked: {
                         console.log("Reset image to track")
                         imageToTrack.source = "image:"
-                        goodFeaturesToTrackFilter.onResetImageToTrack()
+                        siftFilter.onResetImageToTrack()
                      }
                   }
              }
@@ -217,7 +217,7 @@ ApplicationWindow {
             case 'GFTT':
                 console.log("Handle GFTT")
                 disableAllFilters();
-                goodFeaturesToTrackFilter.active = true
+                siftFilter.active = true
 
             break;
 

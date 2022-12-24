@@ -5,11 +5,11 @@
 
 #include <optional>
 
-class GoodFeaturesToTrack final : public IVideoFilter
+class SIFT final : public IVideoFilter
 {
 public:
-    explicit GoodFeaturesToTrack();
-    ~GoodFeaturesToTrack();
+    explicit SIFT();
+    ~SIFT();
     [[nodiscard]] virtual cv::Mat process(const cv::Mat&);
 
 public slots:

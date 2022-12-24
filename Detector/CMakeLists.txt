@@ -49,8 +49,8 @@ set(PROJECT_SOURCES
         src/filters/videofilters.cpp
         src/filters/ivideofilter.h
         src/filters/ivideofilter.cpp
-        src/filters/goodfeaturestotrack.h
-        src/filters/goodfeaturestotrack.cpp
+        src/filters/SIFT.h
+        src/filters/SIFT.cpp
         qml.qrc
 )
 

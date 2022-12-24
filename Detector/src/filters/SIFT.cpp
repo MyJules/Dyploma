@@ -1,18 +1,18 @@
-#include "goodfeaturestotrack.h"
+#include "SIFT.h"
 
 #include <opencv2/features2d.hpp>
 #include <opencv2/core.hpp>
 #include <cvutils.h>
 
-GoodFeaturesToTrack::GoodFeaturesToTrack()
+SIFT::SIFT()
 {
 }
 
-GoodFeaturesToTrack::~GoodFeaturesToTrack()
+SIFT::~SIFT()
 {
 }
 
-cv::Mat GoodFeaturesToTrack::process(const cv::Mat& image)
+cv::Mat SIFT::process(const cv::Mat& image)
 {
     using namespace cv;
 
@@ -29,7 +29,7 @@ cv::Mat GoodFeaturesToTrack::process(const cv::Mat& image)
 
     //-- Step 1: Detect the keypoints using SURF Detector, compute the descriptors
     int minHessian = 400;
-    Ptr<SIFT> detector = SIFT::create( minHessian );
+    Ptr<cv::SIFT> detector = cv::SIFT::create( minHessian );
     std::vector<KeyPoint> keypoints_object, keypoints_scene;
     Mat descriptors_object, descriptors_scene;
     detector->detectAndCompute( *m_imageToTrack, noArray(), keypoints_object, descriptors_object );
@@ -88,13 +88,13 @@ cv::Mat GoodFeaturesToTrack::process(const cv::Mat& image)
     return result;
 }
 
-void GoodFeaturesToTrack::onUpdateImageToTrack()
+void SIFT::onUpdateImageToTrack()
 {
     m_isNewImageToTrack = true;
     qDebug() << "Update";
 }
 
-void GoodFeaturesToTrack::onResetImageToTrack()
+void SIFT::onResetImageToTrack()
 {
     m_imageToTrack = std::nullopt;
     qDebug() << "Reset";

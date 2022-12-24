@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
-    qmlRegisterType<GoodFeaturesToTrackFilter>("com.video.process", 1, 0, "GoodFeaturesToTrackFilter");
+    qmlRegisterType<SIFTFilter>("com.video.process", 1, 0, "SIFTFilter");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
